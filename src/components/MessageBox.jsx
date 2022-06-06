@@ -3,11 +3,12 @@ import styled from 'styled-components'
 function MessageBox({msg}) {
   
   const { message, timestamp, userImage, user} = msg
+  
   let messageDate = new Date(timestamp.seconds * 1000 + timestamp.nanoseconds/1000000)
   messageDate = (`${messageDate.toUTCString()} ${messageDate.toLocaleTimeString()}`)
   return (
     <MessageContainer>
-      <img src={userImage} alt="user-profile" />
+      <img src={userImage} alt="user-profile" referrerPolicy="no-referrer"/>
       <MessageInfo>
         <h4>
         {user}{' '}

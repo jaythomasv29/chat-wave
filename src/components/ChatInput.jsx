@@ -4,10 +4,13 @@ import { Button } from '@mui/material'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 import { setRoomMessages } from '../features/chatSlice'
-import { addMessageToChannel, getMessagesFromChannel, } from '../utils/firebase.utils'
+import { auth, addMessageToChannel, getMessagesFromChannel, } from '../utils/firebase.utils'
+import { useAuthState } from 'react-firebase-hooks/auth'
 
 function ChatInput({ channelId }) {
+  const [user] = useAuthState(auth)
   const dispatch = useDispatch()
+  
   const inputRef = useRef(null)
   const roomName = useSelector(selectRoomName)
 
@@ -23,7 +26,7 @@ function ChatInput({ channelId }) {
     e.preventDefault()
     if (!channelId) return
     const message = inputRef.current.value
-    await addMessageToChannel(message, channelId)
+    await addMessageToChannel(message, channelId, user)
     inputRef.current.value = ''
     setMessages()
   }

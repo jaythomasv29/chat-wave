@@ -13,7 +13,7 @@ import MessageBox from './MessageBox';
 function Chat() {
   const chatRef = useRef(null)
   const roomMessages = useSelector(selectMessages)
-  console.log(roomMessages)
+
   const roomId = useSelector(selectRoomId)
   const roomName = useSelector(selectRoomName)
   const dispatch = useDispatch()
@@ -39,6 +39,7 @@ function Chat() {
 
   return (
     <ChatContainer>
+
       <>
         <Header>
           <HeaderLeft>
@@ -60,17 +61,19 @@ function Chat() {
           </HeaderRight>
         </Header>
       </>
-      <ChatMessages>
-        {roomMessages && roomMessages.roomMessages?.map((message, idx) => (
-          <MessageBox key={idx} msg={message} />
-        ))}
-      </ChatMessages>
+      {
+        roomId &&
+        <>
+          <ChatMessages>
+            {roomMessages && roomMessages.roomMessages?.map((message, idx) => (
+              <MessageBox key={idx} msg={message} />
+            ))}
+          </ChatMessages>
+          <ChatBottom ref={chatRef} />
 
-      <ChatBottom ref={chatRef}/>
-
-      <ChatInput channelId={roomId} />
-      {/* ChannelName */}
-      {/* roomId */}
+          <ChatInput channelId={roomId} />
+        </>
+      }
 
 
     </ChatContainer>

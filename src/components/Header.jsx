@@ -1,20 +1,27 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Outlet } from 'react-router-dom'
 
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import SearchIcon from '@mui/icons-material/Search';
 import DisplaySettingsIcon from '@mui/icons-material/DisplaySettings';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
-import { Avatar } from '@mui/material';
+import { Avatar, Button } from '@mui/material';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../utils/firebase.utils';
 
 
 function Header() {
+  const [user] = useAuthState(auth)
   return (
     <HeaderContainer>
       {/* Header - left */}
       <HeaderLeft>
-        <HeaderAvatar />
+        <HeaderAvatar
+          alt={user?.displayName}
+          src={user?.photoURL}
+          
+
+        />
         <AccessTimeIcon />
       </HeaderLeft>
 
@@ -26,7 +33,13 @@ function Header() {
       </HeaderSearch>
       {/* Header - right */}
       <HeaderRight>
-        <HelpOutlineIcon />
+          <RightContainer>
+            <HelpOutlineIcon />
+        {
+          user &&
+            <Button onClick={() => auth.signOut()}>Sign Out</Button>
+          }
+          </RightContainer>
       </HeaderRight>
 
     </HeaderContainer>
@@ -34,6 +47,11 @@ function Header() {
 }
 
 export default Header;
+
+const RightContainer = styled.div`
+  display: flex;
+  align-items: center;
+`
 
 const HeaderLeft = styled.div`
   flex: 0.4;
@@ -64,7 +82,7 @@ const HeaderSearch = styled.div`
   flex: 0.3;
   opacity: 1;
   border-radius: 6px;
-  background-color: #421f44;
+  background-color: #00268f;
   text-align: center;
   padding: 3px 20px;
   color: gray;

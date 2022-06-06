@@ -1,24 +1,26 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useCollection } from 'react-firebase-hooks/firestore'
-import { roomsCollection } from '../utils/firebase.utils'
+import { auth, roomsCollection } from '../utils/firebase.utils'
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import CreateIcon from '@mui/icons-material/Create';
 import { SIDEBAR_DATA } from '../sidebarData';
 import SidebarOption from './SidebarOption';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import AddIcon from '@mui/icons-material/Add'
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 
 function Sidebar() {
-  const [channels, loading, error] = useCollection(roomsCollection)
-  console.log(channels)
+  const [user] = useAuthState(auth)
+  const [channels] = useCollection(roomsCollection)
+  
   return (
     <SidebarContainer>
       <SidebarHeader>
         <SidebarInfo>
-          <h2>Chat HQ</h2>
-          <h3><FiberManualRecordIcon />James Vongampai</h3>
+          <h2>Workplace Community</h2>
+          <h3><FiberManualRecordIcon />{user?.displayName}</h3>
         </SidebarInfo>
         <CreateIcon />
       </SidebarHeader>
@@ -55,12 +57,12 @@ const SidebarContainer = styled.div`
   > hr {
     margin-top: 10px;
     margin-bottom: 10px;
-    border: 1px solid #49274b;
+    border: 1px solid #00268f;
   }
 `
 const SidebarHeader = styled.div`
   display: flex;
-  border-bottom: 1px solid #49274b;
+  border-bottom: 1px solid #00268f;
   padding: 13px;
 
   > .MuiSvgIcon-root {

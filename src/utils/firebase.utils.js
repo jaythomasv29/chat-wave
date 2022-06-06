@@ -4,6 +4,7 @@ import { initializeApp } from "firebase/app";
 import { collection, doc, getFirestore, setDoc, addDoc, getDocs, query, orderBy } from "firebase/firestore";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
+
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyBmA4aUse3Lq5tM3ktDKr5Sd5B1dtcFMD0",
@@ -22,8 +23,7 @@ export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
 export const roomsCollection = collection(db, "rooms");
 
-export const signInWithGooglePopup = async () =>
-  signInWithPopup(auth, googleProvider);
+export const signInWithGooglePopup = async () => signInWithPopup(auth, googleProvider);
 
 export const addToChannelCollection = async (channel) => {
   const roomsDocRef = doc(collection(db, "rooms"));
@@ -34,7 +34,7 @@ export const addToChannelCollection = async (channel) => {
   }
 };
 
-export const addMessageToChannel = async (message, channelId) => {
+export const addMessageToChannel = async (message, channelId, user) => {
   const date = new Date()
   const roomColRef = collection(db, 'rooms')
   const channelRef = doc(roomColRef, channelId)
@@ -43,8 +43,8 @@ export const addMessageToChannel = async (message, channelId) => {
     await addDoc(channelMessagesRef, {
       message,
       timestamp: date,
-      user: "James",
-      userImage: 'https://cdn1.iconfinder.com/data/icons/basic-ui-set-v5-user-outline/64/Account_profile_user_avatar_small-512.png',
+      user: user.displayName,
+      userImage: user.photoURL,
     })
   } catch (err) {
     console.log(err)
