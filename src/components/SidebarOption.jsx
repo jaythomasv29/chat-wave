@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux'
 
 
 function SidebarOption({ id, Icon, title, addChannelOption }) {
+  console.log(Icon)
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const addChannel = () => {
@@ -44,19 +45,31 @@ export default SidebarOption;
 
 const SidebarOptionContainer = styled.div`
   display: flex;
-  font-size: 12px;
+  font-size: 14px;
   align-items: center;
   padding-left: 5px;
   cursor: pointer;
 
+
+  > .MuiSvgIcon-root {
+    color: white;
+  }
+
   :hover {
     opacity: 0.9;
-    background-color: #340e36;
+    background-color: #191a51;
   }
 
   > h3 {
-    font-weight: 400;
+    font-weight: bolder;
     letter-spacing: 0.25px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 5px 0;
+    padding: 5px;
+
+
   }
 
   > h3 > span {

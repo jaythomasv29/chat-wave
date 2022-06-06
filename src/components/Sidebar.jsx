@@ -50,9 +50,10 @@ export default Sidebar;
 const SidebarContainer = styled.div`
   background-color: var(--slack-color);
   color: white;
-  flex: 0.3;
+  flex: 0.;
   margin-top: 60px;
-  max-width: 260px;
+  max-width: 280px;
+  overflow-y: scroll;
 
   > hr {
     margin-top: 10px;
@@ -66,7 +67,7 @@ const SidebarHeader = styled.div`
   padding: 13px;
 
   > .MuiSvgIcon-root {
-    padding: 8px;
+    padding: 10px;
     color: #49274b;
     padding: 7px;
     border-radius: 50%;
