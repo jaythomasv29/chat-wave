@@ -1,56 +1,88 @@
+import { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 // import { useParams } from 'react-router-dom'
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import InfoIcon from '@mui/icons-material/Info';
-import { selectRoomId, selectRoomName } from '../features/chatSlice';
-import { useSelector } from 'react-redux'
+import { selectRoomId, selectRoomName, setRoomMessages, selectMessages } from '../features/chatSlice';
+import { useDispatch, useSelector } from 'react-redux'
 import ChatInput from './ChatInput';
+
 import { getMessagesFromChannel } from '../utils/firebase.utils';
+import MessageBox from './MessageBox';
 
 function Chat() {
+  const chatRef = useRef(null)
+  const roomMessages = useSelector(selectMessages)
+  console.log(roomMessages)
   const roomId = useSelector(selectRoomId)
   const roomName = useSelector(selectRoomName)
-  const getMessages = async () => {
-    await getMessagesFromChannel(roomId)
-   
-  }
-  console.log(getMessages())
+  const dispatch = useDispatch()
+  useEffect(() => {
+    if (roomId) {
+      const getMessages = async () => {
+        const messages = await getMessagesFromChannel(roomId)
+        dispatch(setRoomMessages({
+          roomMessages: messages
+        }))
+      }
+      getMessages()
+    }
+  }, [roomId, dispatch])
 
-  
-  console.log(roomId)
+  useEffect(() => {
+    chatRef?.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "end"
+    })
+  }, [roomId, roomMessages])
+
+
   return (
     <ChatContainer>
       <>
-      <Header>
-        <HeaderLeft>
-          <h4><strong>{roomName}</strong>
-            <StarBorderIcon />
-          </h4>
-        </HeaderLeft>
-        <HeaderRight>
-          <p>
-            <InfoIcon /> Details
-          </p>
-        </HeaderRight>
-      </Header>
-      <h1>{roomId}</h1>
+        <Header>
+          <HeaderLeft>
+            {
+              roomName &&
+              <h4><strong>{roomName}</strong>
+                <StarBorderIcon />
+              </h4>
+            }
+          </HeaderLeft>
+          <HeaderRight>
+
+
+            <p>
+              <InfoIcon /> Details
+            </p>
+
+
+          </HeaderRight>
+        </Header>
       </>
       <ChatMessages>
-        {/* List out messages */}
+        {roomMessages && roomMessages.roomMessages?.map((message, idx) => (
+          <MessageBox key={idx} msg={message} />
+        ))}
       </ChatMessages>
 
-      <ChatInput channelId={roomId}/>
-        {/* ChannelName */}
-        {/* roomId */}
+      <ChatBottom ref={chatRef}/>
 
-      
+      <ChatInput channelId={roomId} />
+      {/* ChannelName */}
+      {/* roomId */}
+
+
     </ChatContainer>
   )
 }
 
 export default Chat
 
-const ChatMessages = styled.div`` 
+const ChatBottom = styled.div`
+`
+
+const ChatMessages = styled.div``
 
 const Header = styled.div`
   display: flex;
@@ -92,4 +124,5 @@ const ChatContainer = styled.div`
   flex-grow: 1;
   overflow-y: scroll;
   margin-top: 60px;
+  margin-bottom: 80px;
 `

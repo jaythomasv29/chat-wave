@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 
-import { collection, doc, getFirestore, setDoc, addDoc, getDocs,  } from "firebase/firestore";
+import { collection, doc, getFirestore, setDoc, addDoc, getDocs, query, orderBy } from "firebase/firestore";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 // Your web app's Firebase configuration
@@ -56,15 +56,10 @@ export const getMessagesFromChannel = async (channelId) => {
   const roomColRef = collection(db, 'rooms')
   const channelRef = doc(roomColRef, channelId)
   const channelMessagesRef = collection(channelRef, 'messages')
-  const messagesSnapshot = await getDocs(channelMessagesRef)
-  messagesSnapshot.forEach(doc => {
-    console.log(doc.data())
-
-  })
+  const q = query(channelMessagesRef, orderBy('timestamp'))
+  const messagesSnapshot = await getDocs(q)
+  return messagesSnapshot.docs.map(doc => doc.data())
     
-
-
-  
 }
 
 export const getAllChannels = async () => {

@@ -1,23 +1,39 @@
 import React, { useRef } from 'react'
+import { selectRoomName } from '../features/chatSlice'
 import { Button } from '@mui/material'
 import styled from 'styled-components'
-
-import { addMessageToChannel } from '../utils/firebase.utils'
+import { useDispatch, useSelector } from 'react-redux'
+import { setRoomMessages } from '../features/chatSlice'
+import { addMessageToChannel, getMessagesFromChannel, } from '../utils/firebase.utils'
 
 function ChatInput({ channelId }) {
+  const dispatch = useDispatch()
   const inputRef = useRef(null)
-  
+  const roomName = useSelector(selectRoomName)
+
+  const setMessages = async () => {
+    const messages = await getMessagesFromChannel(channelId)
+
+    dispatch(setRoomMessages({
+      roomMessages: messages
+    }))
+  }
+
   const sendMessage = async e => {
     e.preventDefault()
     if (!channelId) return
     const message = inputRef.current.value
     await addMessageToChannel(message, channelId)
     inputRef.current.value = ''
+    setMessages()
   }
   return (
     <ChatInputContainer>
       <form>
-        <input ref={inputRef} type="text" placeholder={`Message #ROOM`} />
+        {
+
+        }
+        <input ref={inputRef} type="text" placeholder={roomName ? `Message #${roomName}` : 'Enter a channel to chat'} />
         <Button hidden type="submit" onClick={sendMessage}>
           SEND
         </Button>
