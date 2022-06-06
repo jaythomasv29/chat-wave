@@ -9,34 +9,42 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
 export const SIDEBAR_DATA = [
   {
+    id: 1,
     icon: InsertCommentIcon,
     title: "Threads"
   },
   {
+    id: 2,
     icon: InboxIcon,
     title: "Mentions & reactions"
   },
   {
+    id: 3,
     icon: DraftsIcon,
     title: "Saved items"
   },
   {
+    id: 4,
     icon: BookmarkIcon,
     title: "Channel browser"
   },
   {
+    id: 5,
     icon: PeopleAltIcon,
     title: "People & user groups"
   },
   {
+    id: 6,
     icon: AppsIcon,
     title: "Apps"
   },
   {
+    id: 7,
     icon: FileCopyIcon,
     title: "File browser"
   },
   {
+    id: 8,
     icon: ExpandLessIcon,
     title: "Show less"
   },

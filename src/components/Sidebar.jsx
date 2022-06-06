@@ -1,5 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
+import { useCollection } from 'react-firebase-hooks/firestore'
+import { roomsCollection } from '../utils/firebase.utils'
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import CreateIcon from '@mui/icons-material/Create';
 import { SIDEBAR_DATA } from '../sidebarData';
@@ -7,27 +9,35 @@ import SidebarOption from './SidebarOption';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import AddIcon from '@mui/icons-material/Add'
 
+
 function Sidebar() {
+  const [channels, loading, error] = useCollection(roomsCollection)
+  console.log(channels)
   return (
     <SidebarContainer>
       <SidebarHeader>
-      <SidebarInfo>
-        <h2>Chat HQ</h2>
-        <h3><FiberManualRecordIcon />James Vongampai</h3>
-      </SidebarInfo>
-      <CreateIcon />
+        <SidebarInfo>
+          <h2>Chat HQ</h2>
+          <h3><FiberManualRecordIcon />James Vongampai</h3>
+        </SidebarInfo>
+        <CreateIcon />
       </SidebarHeader>
 
-    {
-      SIDEBAR_DATA.map(({icon, title}) => (
-        <SidebarOption Icon={icon} title={title} />
+      {
+        SIDEBAR_DATA.map(({ id, icon, title }) => (
+          <SidebarOption key={id} Icon={icon} title={title} />
 
-      ))
-    }
-    <hr />
-    <SidebarOption Icon={ExpandLessIcon} title="Channels" />
-    <hr />
-    <SidebarOption Icon={AddIcon} addChannelOption title="Add Channel" />
+        ))
+      }
+      <hr />
+      <SidebarOption Icon={ExpandLessIcon} title="Channels" />
+      <hr />
+      <SidebarOption Icon={AddIcon} addChannelOption title="Add Channel" />
+      {
+        channels?.docs.map((doc) => (
+          <SidebarOption key={doc.id} id={doc.id} title={doc.data().name} />
+        ))
+      }
 
     </SidebarContainer>
   )

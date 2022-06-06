@@ -1,16 +1,18 @@
 import React from 'react';
 import { Routes, Route} from 'react-router-dom'
 import './App.css';
-import Navigation from './routes/Navigation'
+import Chat from './components/Chat';
+import Home from './routes/Home'
 
 function App() {
   return (
     <>
       <Routes>
-      <Route path="/" element={<Navigation /> }>
-        <Route path="/chat"  element={<h1>Chat</h1> } />
-      </Route>
+      <Route index element={<Home /> } />
+      <Route path=":roomId" element={<Home /> } />
+      
     </Routes>
+    
     </>
   );
 }
